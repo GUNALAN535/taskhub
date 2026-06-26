@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskHub - Task Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            color: #ffffff;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .left-side {
+            flex: 1;
+            background: linear-gradient(135deg, #00d4ff 0%, #0095ff 100%);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .left-side h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .left-side p {
+            font-size: 18px;
+            margin-bottom: 50px;
+            opacity: 0.95;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.3s;
+        }
+
+        .feature:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+        }
+
+        .feature-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .right-side {
+            flex: 1;
+            background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .form-box h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00d4ff, #0095ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-box p {
+            color: #a0aec0;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #16212e;
+            border: 1px solid #2a3447;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input::placeholder {
+            color: #a0aec0;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
+            background: #1a2335;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0095ff 100%);
+            border: none;
+            border-radius: 10px;
+            color: #000000;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #a0aec0;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 42%;
+            height: 1px;
+            background: #2a3447;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .form-footer {
+            text-align: center;
+            font-size: 14px;
+            color: #a0aec0;
+        }
+
+        .form-footer a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-footer a:hover {
+            color: #0095ff;
+            text-decoration: underline;
+        }
+
+        .form-hide {
+            display: none !important;
+        }
+
+        .error-box {
+            padding: 14px 16px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 10px;
+            color: #ff6b7b;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .error-box.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-side {
+                padding: 40px 30px;
+                min-height: 40vh;
+            }
+
+            .right-side {
+                padding: 40px 30px;
+                min-height: 60vh;
+            }
+
+            .left-side h1 {
+                font-size: 36px;
+            }
+
+            .features {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .left-side h1 {
+                font-size: 28px;
+            }
+
+            .left-side p {
+                font-size: 15px;
+            }
+
+            .form-box h2 {
+                font-size: 24px;
+            }
+
+            .feature {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT SIDE - BRANDING -->
+        <div class="left-side">
+            <div class="logo">✓</div>
+            <h1>TaskHub</h1>
+            <p>Manage tasks like a pro</p>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">⚡</span>
+                    <span class="feature-text">Real-time Sync & Instant Updates</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🎯</span>
+                    <span class="feature-text">Smart Task Organization & Tracking</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">💾</span>
+                    <span class="feature-text">Never Lose Your Data - Auto Save</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🚀</span>
+                    <span class="feature-text">Built with Modern Tech Stack</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE - FORMS -->
+        <div class="right-side">
+            <div class="error-box" id="errorBox"></div>
+
+            <!-- LOGIN FORM -->
+            <div class="form-box" id="loginForm">
+                <h2>Welcome Back</h2>
+                <p>Sign in to your account</p>
+
+                <form id="signInForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Sign In</button>
+                </form>
+
+                <div class="divider">or</div>
+
+                <div class="form-footer">
+                    Don't have an account? <a onclick="switchForm()">Create one</a>
+                </div>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div class="form-box form-hide" id="registerForm">
+                <h2>Get Started</h2>
+                <p>Create your free account</p>
+
+                <form id="signUpForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="registerName" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="registerEmail" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="registerPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="registerConfirm" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Create Account</button>
+                </form>
+
+                <div class="divider">or</div>
+
+                <div class="form-footer">
+                    Already have an account? <a onclick="switchForm()">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auth System
+        let users = JSON.parse(localStorage.getItem('taskhub_users')) || [];
+        let currentUser = JSON.parse(sessionStorage.getItem('taskhub_current_user')) || null;
+
+        if (currentUser) {
+            window.location.href = 'dashboard.html';
+        }
+
+        function switchForm() {
+            document.getElementById('loginForm').classList.toggle('form-hide');
+            document.getElementById('registerForm').classList.toggle('form-hide');
+            clearError();
+        }
+
+        function showError(msg) {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.textContent = msg;
+            errorBox.classList.add('show');
+            setTimeout(() => errorBox.classList.remove('show'), 4000);
+        }
+
+        function clearError() {
+            document.getElementById('errorBox').classList.remove('show');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                showError('❌ Invalid email or password');
+                return;
+            }
+
+            sessionStorage.setItem('taskhub_current_user', JSON.stringify({
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }));
+
+            window.location.href = 'dashboard.html';
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+
+            if (!name || !email || !password || !confirm) {
+                showError('❌ All fields are required');
+                return;
+            }
+
+            if (password !== confirm) {
+                showError('❌ Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('❌ Password must be 6+ characters');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                showError('❌ Email already registered');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password
+            };
+
+            users.push(newUser);
+            localStorage.setItem('taskhub_users', JSON.stringify(users));
+
+            sessionStorage.setItem('taskhub_current_user', JSON.stringify({
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email
+            }));
+
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
